@@ -7,22 +7,37 @@ import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import { CartProvider } from "./context/CartContext";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+function RootNavigation() {
+  const { theme } = useTheme();
+
   return (
-    <CartProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} options={{ title: "🛍️ MiniShop" }} />
-          <Stack.Screen name="Product" component={ProductScreen} options={{ title: "Product Details" }} />
-          <Stack.Screen name="Cart" component={CartScreen} options={{ title: "🛒 Cart" }} />
-          <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Login" }} />
-          <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: "Profile" }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </CartProvider>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: theme.card },
+          headerTitleStyle: { color: theme.text },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: "🛍️ MiniShop" }} />
+        <Stack.Screen name="Product" component={ProductScreen} options={{ title: "Product" }} />
+        <Stack.Screen name="Cart" component={CartScreen} options={{ title: "🛒 Cart" }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Login" }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: "Profile" }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
+export default function App() {
+  return (
+    <ThemeProvider>
+      <CartProvider>
+        <RootNavigation />
+      </CartProvider>
+    </ThemeProvider>
+  );
+}
